@@ -1,14 +1,14 @@
-public class LivroImpresso extends Livro {
-
-    int numeroPaginas;
-    String tipoCapa;
+public class LivroImpresso extends Livro implements Emprestimo {
+    private int numeroPaginas;
+    private String tipoCapa;
+    private boolean emprestado;
 
     public LivroImpresso(String titulo, String autor, String isbn, String editora, Integer anoPublicacao, String genero,
                          int numeroPaginas, String tipoCapa) {
         super(titulo, autor, isbn, editora, anoPublicacao, genero);
         this.numeroPaginas = numeroPaginas;
         this.tipoCapa = tipoCapa;
-        this.editora = editora;
+        this.emprestado = false;
     }
 
     public int getNumeroPaginas() {
@@ -28,9 +28,41 @@ public class LivroImpresso extends Livro {
     }
 
     @Override
+    public void emprestar() {
+        if (!emprestado) {
+            emprestado = true;
+            System.out.println("Livro emprestado com sucesso.");
+        } else {
+            System.out.println("O livro já está emprestado.");
+        }
+    }
+
+    @Override
+    public void devolver() {
+        if (emprestado) {
+            emprestado = false;
+            System.out.println("Livro devolvido com sucesso.");
+        } else {
+            System.out.println("O livro não está emprestado.");
+        }
+    }
+
+    @Override
+    public boolean verificarStatusEmprestimo() {
+        return emprestado;
+    }
+
+    @Override
+    public double calcularMulta(int diasAtraso) {
+        double multaPorDia = 0.5;
+        return diasAtraso * multaPorDia;
+    }
+
+    @Override
     public String toString() {
         return super.toString() + "\n" +
-                "Nu?mero de Pa?ginas: " + numeroPaginas + "\n" +
-                "Tipo de Capa: " + tipoCapa;
+                "Número de Páginas: " + numeroPaginas + "\n" +
+                "Tipo de Capa: " + tipoCapa + "\n" +
+                "Emprestado: " + (emprestado ? "Sim" : "Não");
     }
 }
